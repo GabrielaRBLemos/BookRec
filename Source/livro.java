@@ -1,15 +1,11 @@
 public class livro {
-    String book_id[];
-    String title[100];
-    int publicationYear;
-    ArrayList<String> descriptor;
+    private String book_id[];
+    private String title[100];
+    private int publicationYear;
+    private ArrayList<String> descriptor;
+
     public String[] getBook_id() {
         return book_id;
-    }
-    public livro(String[] book_id, int publicationYear, ArrayList<String> descriptor) {
-        this.book_id = book_id;
-        this.publicationYear = publicationYear;
-        this.descriptor = descriptor;
     }
     public void setBook_id(String[] book_id) {
         this.book_id = book_id;
