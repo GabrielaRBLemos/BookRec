@@ -1,14 +1,27 @@
+import java.util.ArrayList;
+
 public class livro {
-    private String book_id[];
-    private String title[100];
+    // private String bookID[];
+    private String title[];
     private int publicationYear;
     private ArrayList<String> descriptor;
 
-    public String[] getBook_id() {
-        return book_id;
+    public livro(String[] title, int publicationYear, ArrayList<String> descriptor) {
+        this.title = title;
+        this.publicationYear = publicationYear;
+        this.descriptor = descriptor;
     }
-    public void setBook_id(String[] book_id) {
-        this.book_id = book_id;
+    // public String[] getbookID() {
+    //     return bookID;
+    // }
+    // public void setbookID(String[] bookID) {
+    //     this.bookID = bookID;
+    // }
+    public String[] getTitle() {
+        return title;
+    }
+    public void setTitle(String[] title) {
+        this.title = title;
     }
     public int getPublicationYear() {
         return publicationYear;
