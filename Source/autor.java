@@ -37,10 +37,10 @@ public class autor {
     public void setNascimento(String nascimento) {
       this.nascimento = nascimento;
     }
-    public Boolean getEstado() {
+    public Boolean getIsAlive() {
       return IsAlive;
     }
-    public void setEstado(Boolean estado) {
+    public void setIsAlive(Boolean IsAlive) {
       this.IsAlive = IsAlive;
     }
 }
