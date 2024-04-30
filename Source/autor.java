@@ -3,8 +3,8 @@ public class autor {
     String nome;
     String pais;
     String nascimento;
-    String estado;
-    public autor(String nome, String pais, String nascimento, String estado, String id){
+    Boolean IsAlive;
+    public autor(String nome, String pais, String nascimento, Boolean estado, String id){
       this.id = id;
       this.nome = nome;
       this.pais = pais;
@@ -37,10 +37,10 @@ public class autor {
     public void setNascimento(String nascimento) {
       this.nascimento = nascimento;
     }
-    public String getEstado() {
+    public Boolean getEstado() {
       return estado;
     }
-    public void setEstado(String estado) {
+    public void setEstado(Boolean estado) {
       this.estado = estado;
     }
 }
