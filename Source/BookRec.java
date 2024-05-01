@@ -1,12 +1,32 @@
-import java.util.Scanner;  
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 
 public class BookRec {
-    public static void main(String[] args) {
-        Scanner reader = new Scanner(new File("Data/Autores.csv"));
-        reader.useDelimiter(",");
-        while (reader.hasNext()){
-            System.out.println(reader.next());
+    
+    public static String changeAuthorsPathBasedOnOS(){
+        String osName = System.getProperty("os.name").toLowerCase();
+        if (osName == "windows") {
+            return "Data\\Autores.csv";             
         }
-        reader.close();
+        return "Data/Autores.csv";
+    }
+
+    public static void readAutores(String AuthorsFile){
+        AuthorsFile = changeAuthorsPathBasedOnOS();
+        
+        try (Scanner scanner = new Scanner(new File(AuthorsFile))) {
+            scanner.useDelimiter(",|\\n");
+            while (scanner.hasNext()) {
+                System.out.print(scanner.next() + "\t");
+            }
+        } catch (FileNotFoundException e) {
+            System.err.println("File not found: " + AuthorsFile);
+            e.printStackTrace();
+        }
+    }
+
+    public static void main(String[] args) {
+        readAutores(changeAuthorsPathBasedOnOS());
     }
 }
