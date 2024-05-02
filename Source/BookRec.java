@@ -6,7 +6,7 @@ public class BookRec {
     
     public static String changeAuthorsPathBasedOnOS(){
         String osName = System.getProperty("os.name").toLowerCase();
-        if (osName == "windows") {
+        if (osName.equals("windows")) {
             return "Data\\Autores.csv";             
         }
         return "Data/Autores.csv";
