@@ -9,12 +9,19 @@ public class BookRec {
     public static String changeAuthorsPathBasedOnOS(){
         String osName = System.getProperty("os.name").toLowerCase();
         if (osName.contains("windows")) {
-            return "Data\\Autores.csv";             
+            return "Data\\Authors.csv";             
         }
-        return "Data/Autores.csv";
+        return "Data/Authors.csv";
+    }
+    public static String changeReadPathBasedOnOS(){
+        String osName = System.getProperty("os.name").toLowerCase();
+        if (osName.contains("windows")) {
+            return "Data\\Read.csv";             
+        }
+        return "Data/Read.csv";
     }
 
-    public static List<autor> readAutores(){
+    public static List<autor> readAuthors(){
         String authorsFile = changeAuthorsPathBasedOnOS();
         List<autor> authors = new ArrayList<>();
         
@@ -38,8 +45,33 @@ public class BookRec {
         return authors;
     }
 
+    public static List<livroLido> readRead(){
+        String readBooksFile = changeReadPathBasedOnOS();
+        List<livroLido> readBookList = new ArrayList<>();
+        
+        try (Scanner scanner = new Scanner(new File(readBooksFile))) {
+            scanner.useDelimiter(",|\\n");
+            while (scanner.hasNext()) {
+                String idAutor = scanner.next();
+                String title = scanner.next();
+                String publicationYear = scanner.next();
+                String descriptor = scanner.next();
+
+                livroLido newRead = new livroLido(null, title, publicationYear, null);
+                readBookList.add(newRead);
+            }
+        } catch (FileNotFoundException e) {
+            System.err.println("File not found: " + readBooksFile);
+            e.printStackTrace();
+        }
+        
+        return readBookList;
+    }
+
+
+
     public static void main(String[] args) {
-        List<autor> authors = readAutores();
+        List<autor> authors = readAuthors();
         for (autor a : authors) {
             System.out.println("ID: " + a.getId());
             System.out.println("Nome: " + a.getNome());
