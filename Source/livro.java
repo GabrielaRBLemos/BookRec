@@ -1,21 +1,21 @@
 import java.util.ArrayList;
 
 public class livro {
-    private String[] idAutor;
+    private ArrayList<String> idAutor;
     private String title;
     private String publicationYear;
     private ArrayList<String> descriptor;
 
-    public livro(String[] idAutor, String title, String publicationYear, ArrayList<String> descriptor) {
+    public livro(ArrayList<String> idAutor, String title, String publicationYear, ArrayList<String> descriptor) {
         this.idAutor = idAutor;
         this.title = title;
         this.publicationYear = publicationYear;
         this.descriptor = descriptor;
     }
-    public String[] getIdAutor() {
+    public ArrayList<String> getIdAutor() {
         return idAutor;
     }
-    public void setIdAutor(String[] idAutor) {
+    public void setIdAutor(ArrayList<String> idAutor) {
         this.idAutor = idAutor;
     }
     public String getTitle() {

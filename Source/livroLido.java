@@ -4,8 +4,9 @@ public class livroLido extends livro{
     private float rating;
 
 
-    public livroLido(String[] idAutor, String title, String publicationYear, ArrayList<String> descriptor) {
+    public livroLido(ArrayList<String> idAutor, String title, String publicationYear, ArrayList<String> descriptor, float rating) {
         super(idAutor, title, publicationYear, descriptor);
+        this.rating = rating;
     }
 
     public float getRating() {
