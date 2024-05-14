@@ -1,11 +1,11 @@
 import java.util.ArrayList;
 
-public class livroLido extends livro{
+public class readBook extends book{
     private float rating;
 
 
-    public livroLido(ArrayList<String> idAutor, String title, String publicationYear, ArrayList<String> descriptor, float rating) {
-        super(idAutor, title, publicationYear, descriptor);
+    public readBook(ArrayList<String> idAuthor, String title, String publicationYear, ArrayList<String> descriptor, float rating) {
+        super(idAuthor, title, publicationYear, descriptor);
         this.rating = rating;
     }
 
