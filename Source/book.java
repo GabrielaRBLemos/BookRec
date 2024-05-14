@@ -1,22 +1,22 @@
 import java.util.ArrayList;
 
-public class livro {
-    private ArrayList<String> idAutor;
+public class book{
+    private ArrayList<String> idAuthor;
     private String title;
     private String publicationYear;
     private ArrayList<String> descriptor;
 
-    public livro(ArrayList<String> idAutor, String title, String publicationYear, ArrayList<String> descriptor) {
-        this.idAutor = idAutor;
+    public book(ArrayList<String> idAuthor, String title, String publicationYear, ArrayList<String> descriptor) {
+        this.idAuthor = idAuthor;
         this.title = title;
         this.publicationYear = publicationYear;
         this.descriptor = descriptor;
     }
-    public ArrayList<String> getIdAutor() {
-        return idAutor;
+    public ArrayList<String> getIdAuthor() {
+        return idAuthor;
     }
-    public void setIdAutor(ArrayList<String> idAutor) {
-        this.idAutor = idAutor;
+    public void setIdAuthor(ArrayList<String> idAuthor) {
+        this.idAuthor = idAuthor;
     }
     public String getTitle() {
         return title;
@@ -36,6 +36,6 @@ public class livro {
     public void setDescriptor(ArrayList<String> descriptor) {
         this.descriptor = descriptor;
     }
-    
-    
+
+
 }
