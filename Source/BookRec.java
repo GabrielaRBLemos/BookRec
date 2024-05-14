@@ -1,11 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class BookRec {
 
@@ -53,30 +49,9 @@ public class BookRec {
         return authors;
     }
 
-    public static ArrayList<readBook> readReadBooks(){
-        String readBookListFile = changeReadPathBasedOnOS();
-        ArrayList<readBook> readBookList = new ArrayList<>();
-    }
-
-    /*WORK IN PROGRESS */
-    // public static ArrayList<readBook> readReadBooks(){
-    //     String readBookListFile = changeReadPathBasedOnOS();
-    //     ArrayList<readBook> readBookList = new ArrayList<>();
-    //     String Line;
-    //         try (Scanner scanner = new Scanner(new File(readBookListFile))) {
-    //             while (scanner.hasNextLine()) {
-    //                 line = scanner.nextLine();
-    //                 String[] parts = line.split(",(?![^\\[]*\\])");
-    //             }
-    //         }
-    //         catch (FileNotFoundException e){
-    //             System.err.println("File not found: " + readBookListFile);
-    //             e.printStackTrace();
-    //         }
-    //     return readBookList;
-    // }
-    /*END OF WORK IN PROGRESS */
-
+    // TODO CSV READER ReadBook
+    
+    // TODO CSV READER TBRBook
     public static void main(String[] args) {
         ArrayList<author> authors = readAuthors();
         // ArrayList<readBook> readBookList = readReadBooks();
@@ -88,8 +63,8 @@ public class BookRec {
             System.out.println("Is Alive: " + a.getIsAlive());
             System.out.println();
         }
-        for (readBook r : readBookList) {
-            System.out.println("Title: "+ r.getTitle());
-        }
+        // for (readBook r : readBookList) {
+        //     System.out.println("Title: "+ r.getTitle());
+        // }
     }
 }

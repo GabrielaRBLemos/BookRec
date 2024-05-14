@@ -3,9 +3,8 @@ import java.util.ArrayList;
 public class TBRBook extends book{
     private boolean priority;
 
-    public TBRBook(ArrayList<String> idAuthor, String title, String publicationYear, ArrayList<String> descriptor,
-            boolean priority) {
-        super(idAuthor, title, publicationYear, descriptor);
+    public TBRBook(ArrayList<String> idAuthor, String id, String title, String publicationYear, boolean priority) {
+        super(id, title, publicationYear);
         this.priority = priority;
     }
 

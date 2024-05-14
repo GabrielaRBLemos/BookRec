@@ -1,22 +1,19 @@
-import java.util.ArrayList;
-
 public class book{
-    private ArrayList<String> idAuthor;
+    private String id;
     private String title;
     private String publicationYear;
-    private ArrayList<String> descriptor;
 
-    public book(ArrayList<String> idAuthor, String title, String publicationYear, ArrayList<String> descriptor) {
-        this.idAuthor = idAuthor;
+    public book(String id, String title, String publicationYear) {
+        this.id = id;
         this.title = title;
         this.publicationYear = publicationYear;
-        this.descriptor = descriptor;
     }
-    public ArrayList<String> getIdAuthor() {
-        return idAuthor;
+
+    public String getId() {
+        return id;
     }
-    public void setIdAuthor(ArrayList<String> idAuthor) {
-        this.idAuthor = idAuthor;
+    public void setId(String id) {
+        this.id = id;
     }
     public String getTitle() {
         return title;
@@ -29,12 +26,6 @@ public class book{
     }
     public void setPublicationYear(String publicationYear) {
         this.publicationYear = publicationYear;
-    }
-    public ArrayList<String> getDescriptor() {
-        return descriptor;
-    }
-    public void setDescriptor(ArrayList<String> descriptor) {
-        this.descriptor = descriptor;
     }
 
 
