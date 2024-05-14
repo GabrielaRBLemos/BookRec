@@ -1,9 +1,7 @@
-import java.util.ArrayList;
-
 public class readBook extends book{
     private float rating;
 
-    public readBook(ArrayList<String> idAuthor, String id, String title, String publicationYear, float rating) {
+    public readBook(String id, String title, String publicationYear, float rating) {
         super(id, title, publicationYear);
         this.rating = rating;
     }

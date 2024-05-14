@@ -17,15 +17,15 @@ public class BookRec {
     public static String changeReadPathBasedOnOS(){
         String osName = System.getProperty("os.name").toLowerCase();
         if (osName.contains("windows")) {
-            return "Data\\Read.csv";             
+            return "Data\\ReadBook.csv";             
         }
-        return "Data/Read.csv";
+        return "Data/ReadBook.csv";
     }
 
     public static ArrayList<author> readAuthors(){
 
         String authorsFile = changeAuthorsPathBasedOnOS();
-        ArrayList<author> authors = new ArrayList<>();
+        ArrayList<author> authorList = new ArrayList<>();
 
         try (Scanner scanner = new Scanner(new File(authorsFile))) {
 
@@ -40,22 +40,45 @@ public class BookRec {
                 boolean isAlive = Boolean.parseBoolean(scanner.next());
 
                 author newAuthor = new author(name, country, birthYear, isAlive, id);
-                authors.add(newAuthor);
+                authorList.add(newAuthor);
             }
         } catch (FileNotFoundException e) {
             System.err.println("File not found: " + authorsFile);
             e.printStackTrace();
         }
-        return authors;
+        return authorList;
     }
 
-    // TODO CSV READER ReadBook
+    public static ArrayList<readBook> readReadBooks() {
+        String readBooksFile = changeReadPathBasedOnOS();
+        ArrayList<readBook> readBookList = new ArrayList<>();
+
+        try (Scanner scanner = new Scanner(new File(readBooksFile))) {
+            scanner.useDelimiter(",|\\n");
+
+            while (scanner.hasNext()) {
+                String id = scanner.next();
+                String title = scanner.next();
+                String publicationYear = scanner.next();
+                float rating = Float.parseFloat(scanner.next());
+
+                // Assuming you have a book constructor that takes ID, title, and publication year
+                readBook readBook = new readBook(id, title, publicationYear, rating);
+                readBookList.add(readBook);
+            }
+        } catch (FileNotFoundException e) {
+            System.err.println("File not found: " + readBooksFile);
+            e.printStackTrace();
+        }
+
+        return readBookList;
+    }
     
     // TODO CSV READER TBRBook
     public static void main(String[] args) {
-        ArrayList<author> authors = readAuthors();
-        // ArrayList<readBook> readBookList = readReadBooks();
-        for (author a : authors) {
+        ArrayList<author> authorList = readAuthors();
+        ArrayList<readBook> readBookList = readReadBooks();
+        for (author a : authorList) {
             System.out.println("ID: " + a.getId());
             System.out.println("Name: " + a.getName());
             System.out.println("Country: " + a.getCountry());
@@ -63,8 +86,12 @@ public class BookRec {
             System.out.println("Is Alive: " + a.getIsAlive());
             System.out.println();
         }
-        // for (readBook r : readBookList) {
-        //     System.out.println("Title: "+ r.getTitle());
-        // }
+        for (readBook rb : readBookList) {
+            System.out.println("ID: " + rb.getId());
+            System.out.println("Title: " + rb.getTitle());
+            System.out.println("Publication: " + rb.getPublicationYear());
+            System.out.println("Rating: " + rb.getRating());
+            System.out.println();
+        }
     }
 }
