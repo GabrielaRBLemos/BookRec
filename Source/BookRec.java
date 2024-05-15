@@ -14,6 +14,15 @@ public class BookRec {
         }
         return "Data/Authors.csv";
     }
+
+    public static String changeAuthorshipPathBasedOnOS(){
+        String osName = System.getProperty("os.name").toLowerCase();
+        if (osName.contains("windows")) {
+            return "Data\\Authorship.csv";             
+        }
+        return "Data/Authorship.csv";
+    }
+
     public static String changeReadPathBasedOnOS(){
         String osName = System.getProperty("os.name").toLowerCase();
         if (osName.contains("windows")) {
@@ -62,7 +71,6 @@ public class BookRec {
                 String publicationYear = scanner.next();
                 float rating = Float.parseFloat(scanner.next());
 
-                // Assuming you have a book constructor that takes ID, title, and publication year
                 readBook readBook = new readBook(id, title, publicationYear, rating);
                 readBookList.add(readBook);
             }
@@ -73,12 +81,68 @@ public class BookRec {
 
         return readBookList;
     }
-    
-    // TODO CSV READER TBRBook
+
+    public static ArrayList<authorship> readAuthorship() {
+        String authorshipFile = changeAuthorshipPathBasedOnOS();
+        ArrayList<authorship> authorshipList = new ArrayList<>();
+
+        try (Scanner scanner = new Scanner(new File(authorshipFile))) {
+            scanner.useDelimiter(",|\\n");
+
+            while (scanner.hasNext()) {
+                String bookId = scanner.next();
+                String authorId = scanner.next();
+
+                authorship authorship = new authorship(bookId, authorId);
+                authorshipList.add(authorship);
+            }
+        } catch (FileNotFoundException e) {
+            System.err.println("File not found: " + authorshipFile);
+            e.printStackTrace();
+        }
+
+        return authorshipList;
+    }
+
+    public static String getAuthorNameById(String authorId, ArrayList<author> authorList){
+        String authorName = null;
+
+        for (author author : authorList) {
+            if (authorId.equals(author.getId())) {
+                authorName = author.getName();
+                break;
+            }
+        }
+
+        return authorName;
+    }
+
+    public static ArrayList<String> getAuthorsForBook(String bookId, ArrayList<authorship> authorshipList, ArrayList<author> authorList) {
+        ArrayList<String> bookAuthors = new ArrayList<>();
+        String authorName;
+        for (authorship authorship : authorshipList) {
+            if (authorship.getBookId().equals(bookId)) {
+                authorName = getAuthorNameById(authorship.getAuthorId(), authorList);
+                if (authorName == null) {
+                    authorName = authorship.getAuthorId();
+                }
+                else{
+                    bookAuthors.add(authorName);
+                }
+            }
+        }
+        return bookAuthors;
+    }
+
+    // TODO: reader for TBRBook
     public static void main(String[] args) {
         ArrayList<author> authorList = readAuthors();
         ArrayList<readBook> readBookList = readReadBooks();
+        ArrayList<authorship> authorshipList = readAuthorship();
+        ArrayList<String> bookAuthorship;
+
         for (author a : authorList) {
+
             System.out.println("ID: " + a.getId());
             System.out.println("Name: " + a.getName());
             System.out.println("Country: " + a.getCountry());
@@ -87,10 +151,14 @@ public class BookRec {
             System.out.println();
         }
         for (readBook rb : readBookList) {
+
+            bookAuthorship = getAuthorsForBook(rb.getId(), authorshipList, authorList);
+
             System.out.println("ID: " + rb.getId());
             System.out.println("Title: " + rb.getTitle());
             System.out.println("Publication: " + rb.getPublicationYear());
             System.out.println("Rating: " + rb.getRating());
+            System.out.println("Authors:" + bookAuthorship);
             System.out.println();
         }
     }
