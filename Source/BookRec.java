@@ -4,31 +4,31 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class BookRec {
-
-    public static String changeAuthorsPathBasedOnOS(){
+    public static String changePathBasedOnOS(String windowsPath, String generalPath){
         String osName = System.getProperty("os.name").toLowerCase();
 
         if (osName.contains("windows")) {
 
-            return "Data\\Authors.csv";             
+            return windowsPath;             
         }
-        return "Data/Authors.csv";
+        return generalPath;
+    }
+    public static String changeAuthorsPathBasedOnOS(){
+        windowsPath = "Data\\Authors.csv";
+        generalPath = "Data/Authors.csv";
+        return changePathBasedOnOS(windowsPath,generalPath);
     }
 
     public static String changeAuthorshipPathBasedOnOS(){
-        String osName = System.getProperty("os.name").toLowerCase();
-        if (osName.contains("windows")) {
-            return "Data\\Authorship.csv";             
-        }
-        return "Data/Authorship.csv";
+        windowsPath = "Data\\Authorship.csv";             
+        generalPath = "Data/Authorship.csv";
+        return changePathBasedOnOS(windowsPath,generalPath);
     }
 
     public static String changeReadPathBasedOnOS(){
-        String osName = System.getProperty("os.name").toLowerCase();
-        if (osName.contains("windows")) {
-            return "Data\\ReadBook.csv";             
-        }
-        return "Data/ReadBook.csv";
+        windowsPath = "Data\\ReadBook.csv";
+        generalPath = "Data/ReadBook.csv";
+        return changePathBasedOnOS(windowsPath,generalPath);
     }
 
     public static ArrayList<author> readAuthors(){
