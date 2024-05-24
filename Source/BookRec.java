@@ -13,21 +13,27 @@ public class BookRec {
         }
         return generalPath;
     }
-    public static String changeAuthorsPathBasedOnOS(){
-        windowsPath = "Data\\Authors.csv";
-        generalPath = "Data/Authors.csv";
+    public static String changeAuthorsPathBasedOnOS(){ 
+        String windowsPath = "Data\\Authors.csv";
+        String generalPath = "Data/Authors.csv";
         return changePathBasedOnOS(windowsPath,generalPath);
     }
 
     public static String changeAuthorshipPathBasedOnOS(){
-        windowsPath = "Data\\Authorship.csv";             
-        generalPath = "Data/Authorship.csv";
+        String windowsPath = "Data\\Authorship.csv";             
+        String generalPath = "Data/Authorship.csv";
         return changePathBasedOnOS(windowsPath,generalPath);
     }
 
     public static String changeReadPathBasedOnOS(){
-        windowsPath = "Data\\ReadBook.csv";
-        generalPath = "Data/ReadBook.csv";
+        String windowsPath = "Data\\ReadBook.csv";
+        String generalPath = "Data/ReadBook.csv";
+        return changePathBasedOnOS(windowsPath,generalPath);
+    }
+
+    public static String changeTBRPathBasedOnOS(){
+        String windowsPath = "Data\\TBRBook.csv";
+        String generalPath = "Data/TBRBook.csv";
         return changePathBasedOnOS(windowsPath,generalPath);
     }
 
@@ -82,6 +88,30 @@ public class BookRec {
         return readBookList;
     }
 
+    public static ArrayList<tBRBook> readTBRBooks(){
+        String tBRBooksFile = changeTBRPathBasedOnOS();
+        ArrayList<tBRBook> tBRBookList = new ArrayList<>();
+
+        try (Scanner scanner = new Scanner(new File(tBRBooksFile))) {
+            scanner.useDelimiter(",|\\n");
+
+            while (scanner.hasNext()) {
+                String id = scanner.next();
+                String title = scanner.next();
+                String publicationYear = scanner.next();
+                Boolean priority = Boolean.parseBoolean(scanner.next());
+
+                tBRBook tBRBook = new tBRBook(id, title, publicationYear, priority);
+                tBRBookList.add(tBRBook);
+            }
+        } catch (FileNotFoundException e) {
+            System.err.println("File not found: " + tBRBooksFile);
+            e.printStackTrace();
+        }
+
+        return tBRBookList;
+    }
+
     public static ArrayList<authorship> readAuthorship() {
         String authorshipFile = changeAuthorshipPathBasedOnOS();
         ArrayList<authorship> authorshipList = new ArrayList<>();
@@ -133,11 +163,10 @@ public class BookRec {
         }
         return bookAuthors;
     }
-
-    // TODO: reader for TBRBook
     public static void main(String[] args) {
         ArrayList<author> authorList = readAuthors();
         ArrayList<readBook> readBookList = readReadBooks();
+        ArrayList<tBRBook> tBRBookList = readTBRBooks();
         ArrayList<authorship> authorshipList = readAuthorship();
         ArrayList<String> bookAuthorship;
 
@@ -158,6 +187,18 @@ public class BookRec {
             System.out.println("Title: " + rb.getTitle());
             System.out.println("Publication: " + rb.getPublicationYear());
             System.out.println("Rating: " + rb.getRating());
+            System.out.println("Authors:" + bookAuthorship);
+            System.out.println();
+        }
+
+        for (tBRBook tbrb : tBRBookList) {
+
+            bookAuthorship = getAuthorsForBook(tbrb.getId(), authorshipList, authorList);
+
+            System.out.println("ID: " + tbrb.getId());
+            System.out.println("Title: " + tbrb.getTitle());
+            System.out.println("Publication: " + tbrb.getPublicationYear());
+            System.out.println("Priority: " + tbrb.isPriority());
             System.out.println("Authors:" + bookAuthorship);
             System.out.println();
         }
