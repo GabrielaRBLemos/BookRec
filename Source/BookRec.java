@@ -163,11 +163,8 @@ public class BookRec {
         }
         return bookAuthors;
     }
-    public static void main(String[] args) {
-        ArrayList<author> authorList = readAuthors();
-        ArrayList<readBook> readBookList = readReadBooks();
-        ArrayList<tBRBook> tBRBookList = readTBRBooks();
-        ArrayList<authorship> authorshipList = readAuthorship();
+
+    public static void printAll( ArrayList<author> authorList, ArrayList<readBook> readBookList, ArrayList<tBRBook> tBRBookList, ArrayList<authorship> authorshipList) {
         ArrayList<String> bookAuthorship;
 
         for (author a : authorList) {
@@ -202,5 +199,15 @@ public class BookRec {
             System.out.println("Authors:" + bookAuthorship);
             System.out.println();
         }
+    }
+
+    public static void main(String[] args) {
+        ArrayList<author> authorList = readAuthors();
+        ArrayList<readBook> readBookList = readReadBooks();
+        ArrayList<tBRBook> tBRBookList = readTBRBooks();
+        ArrayList<authorship> authorshipList = readAuthorship();
+
+
+        printAll(authorList, readBookList, tBRBookList, authorshipList);
     }
 }
