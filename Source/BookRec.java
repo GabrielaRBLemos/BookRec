@@ -2,6 +2,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.Random;
 
 public class BookRec {
     public static String changePathBasedOnOS(String windowsPath, String generalPath){
@@ -164,27 +165,45 @@ public class BookRec {
         return bookAuthors;
     }
 
+    public static ArrayList<String> getTBRBookListIDs(ArrayList<tBRBook> tBRBookList) {
+        ArrayList<String> ids = new ArrayList<>();
+        for (tBRBook book : tBRBookList) {
+            ids.add(book.getId());
+        }
+        return ids;
+    }
+
+    public static ArrayList<String> getReadBookListIDs(ArrayList<readBook> readBookList) {
+        ArrayList<String> ids = new ArrayList<>();
+        for (readBook book : readBookList) {
+            ids.add(book.getId());
+        }
+        return ids;
+    }
+
     public static void printAll( ArrayList<author> authorList, ArrayList<readBook> readBookList, ArrayList<tBRBook> tBRBookList, ArrayList<authorship> authorshipList) {
         ArrayList<String> bookAuthorship;
 
+        System.out.println("Dados Registrados:");
+
         for (author a : authorList) {
 
-            System.out.println("ID: " + a.getId());
-            System.out.println("Name: " + a.getName());
-            System.out.println("Country: " + a.getCountry());
-            System.out.println("Birth Year: " + a.getBirthYear());
-            System.out.println("Is Alive: " + a.getIsAlive());
+            System.out.println("    ID: " + a.getId());
+            System.out.println("    Name: " + a.getName());
+            System.out.println("    Country: " + a.getCountry());
+            System.out.println("    Birth Year: " + a.getBirthYear());
+            System.out.println("    Is Alive: " + a.getIsAlive());
             System.out.println();
         }
         for (readBook rb : readBookList) {
 
             bookAuthorship = getAuthorsForBook(rb.getId(), authorshipList, authorList);
 
-            System.out.println("ID: " + rb.getId());
-            System.out.println("Title: " + rb.getTitle());
-            System.out.println("Publication: " + rb.getPublicationYear());
-            System.out.println("Rating: " + rb.getRating());
-            System.out.println("Authors:" + bookAuthorship);
+            System.out.println("    ID: " + rb.getId());
+            System.out.println("    Title: " + rb.getTitle());
+            System.out.println("    Publication: " + rb.getPublicationYear());
+            System.out.println("    Rating: " + rb.getRating());
+            System.out.println("    Authors:" + bookAuthorship);
             System.out.println();
         }
 
@@ -192,22 +211,130 @@ public class BookRec {
 
             bookAuthorship = getAuthorsForBook(tbrb.getId(), authorshipList, authorList);
 
-            System.out.println("ID: " + tbrb.getId());
-            System.out.println("Title: " + tbrb.getTitle());
-            System.out.println("Publication: " + tbrb.getPublicationYear());
-            System.out.println("Priority: " + tbrb.isPriority());
-            System.out.println("Authors:" + bookAuthorship);
+            System.out.println("    ID: " + tbrb.getId());
+            System.out.println("    Title: " + tbrb.getTitle());
+            System.out.println("    Publication: " + tbrb.getPublicationYear());
+            System.out.println("    Priority: " + tbrb.isPriority());
+            System.out.println("    Authors:" + bookAuthorship);
             System.out.println();
         }
     }
 
+    public static void printMenuNewBook() {
+        System.out.println("Menu:");
+        System.out.println("1. Inserir na lista de livros lidos.");
+        System.out.println("2. Inserir na lista de livros a serem lidos.");
+        System.out.println("0. Cancelar.");
+    }
+
+    public static void insertNewBook(ArrayList<readBook> readBookList, ArrayList<tBRBook> tBRBookList) {
+        int choice;
+        ArrayList<String> tBRBookIDList, readBookIDList;
+        String newBookTitle, newBookPublicationYear, newBookID;
+        char aux2;
+        float newBookRating;
+        Boolean newBookPriority;
+
+        Scanner scanner = new Scanner(System.in);
+        do {
+            printMenuNewBook();
+            System.out.print("Insira o número da sua escolha:");
+            choice = scanner.nextInt();
+            scanner.nextLine();
+            System.out.print("Insira o título do livro: ");
+            newBookTitle = scanner.nextLine();
+            System.out.print("Insira o ano de publicação do livro: ");
+            newBookPublicationYear = scanner.nextLine();
+
+            Random random = new Random();
+
+            switch (choice) {
+                case 1:
+                    tBRBookIDList = getTBRBookListIDs(tBRBookList);
+                    do {
+                        newBookID = "tbr" + random.nextInt(1000);
+                    } while (tBRBookIDList.contains(newBookID));
+
+                    System.out.print("Insira a nota, entre 0.0 e 5.0 estrelas, do livro: ");
+                    newBookRating = scanner.nextFloat();
+                    readBook newReadBook = new readBook(null, newBookTitle, newBookPublicationYear, newBookRating);
+
+                    readBookList.add(newReadBook);
+                    System.out.println(newBookTitle + " foi inserido na lista.");
+                    break;
+                case 2:
+                    readBookIDList = getReadBookListIDs(readBookList);
+                    do {
+                        newBookID = "r" + random.nextInt(1000);
+                    } while (readBookIDList.contains(newBookID));
+
+                    System.out.print("Se o seu livro é uma prioridade entre suas próximas leituras, digite S ou Y:");
+                    aux2 = scanner.next().charAt(0);
+                    if ('Y' == aux2 || 'S' == aux2 || 'y' == aux2 || 's' == aux2) {
+                        newBookPriority = true;
+                    }
+                    else{
+                        newBookPriority = false;
+                    }
+                    tBRBook newTBRBook = new tBRBook(null, newBookTitle, newBookPublicationYear, newBookPriority);
+
+                    tBRBookList.add(newTBRBook);
+                    System.out.println(newBookTitle + " foi inserido na lista.");
+                    break;
+                case 0:
+                    return;
+                default:
+                    break;
+            }
+
+        } while (choice != 0);
+        scanner.close();
+    }
+
+    public static void printMenu () {
+        System.out.println("Menu:");
+        System.out.println("1. Exibir todos os dados registrados.");
+        System.out.println("2. Inserir livro.");
+        System.out.println("3. Remover livro.");
+        System.out.println("4. Atualizar livro.");
+        System.out.println("5. Registrar livro como lido.");
+        System.out.println("0. Sair.");
+    }
+    
     public static void main(String[] args) {
         ArrayList<author> authorList = readAuthors();
         ArrayList<readBook> readBookList = readReadBooks();
         ArrayList<tBRBook> tBRBookList = readTBRBooks();
         ArrayList<authorship> authorshipList = readAuthorship();
+        int choice;
 
+        Scanner scanner = new Scanner(System.in);
+        do {
+            printMenu();
+            System.out.print("Insira o número da sua escolha:");
+            choice = scanner.nextInt();
 
-        printAll(authorList, readBookList, tBRBookList, authorshipList);
+            switch (choice) {
+                case 1:
+                    printAll(authorList, readBookList, tBRBookList, authorshipList);
+                    break;
+                case 2:
+                    insertNewBook(readBookList,tBRBookList);
+                    break;
+                case 3:
+                    
+                    break;
+                case 4:
+                    
+                    break;
+                case 0:
+                        
+                    break;
+            
+                default:
+                    break;
+            }
+        } while (choice != 0);
+        scanner.close();
     }
 }
