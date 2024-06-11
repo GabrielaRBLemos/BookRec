@@ -474,11 +474,10 @@ public static void printBookTitlesAndId(ArrayList<tBRBook> tBRBookList){
         String fileName = changeReadPathBasedOnOS();
 
         try {
-            FileWriter writer = new FileWriter(fileName);
 
-            for (readBook book : readBookList) {
-                writer.write(book.getId() + "," + book.getTitle() + "," + book.getPublicationYear() + "," + book.getRating() + "\n");
-            }
+            String tempFileName = fileName + ".temp";
+            FileWriter writer = new FileWriter(tempFileName);
+
 
             writer.close();
 
@@ -486,85 +485,92 @@ public static void printBookTitlesAndId(ArrayList<tBRBook> tBRBookList){
             if (previousFile.exists()) {
                 previousFile.delete();
             }
+
+            File tempFile = new File(tempFileName);
+            tempFile.renameTo(previousFile);
 
             System.out.println("ReadBook.csv atualizado.");
 
         } catch (IOException e) {
             System.err.println("Erro atualizando ReadBook.csv: " + e.getMessage());
         }
-    }
+}
 
-    public static void updateTBRBookCSV(ArrayList<tBRBook> tBRBookList) {
-        String fileName = changeTBRPathBasedOnOS();
+public static void updateTBRBookCSV(ArrayList<tBRBook> tBRBookList) {
+    String fileName = changeTBRPathBasedOnOS();
 
-        try {
-            FileWriter writer = new FileWriter(fileName);
+    try {
 
-            for (tBRBook book : tBRBookList) {
-                writer.write(book.getId() + "," + book.getTitle() + "," + book.getPublicationYear() + "," + book.isPriority() + "\n");
-            }
+        String tempFileName = fileName + ".temp";
+        FileWriter writer = new FileWriter(tempFileName);
 
-            writer.close();
+        writer.close();
 
-            File previousFile = new File(fileName);
-            if (previousFile.exists()) {
-                previousFile.delete();
-            }
-
-            System.out.println("TBRBook.csv atualizado.");
-
-        } catch (IOException e) {
-            System.err.println("Erro atualizando TBRBook.csv: " + e.getMessage());
+        File previousFile = new File(fileName);
+        if (previousFile.exists()) {
+            previousFile.delete();
         }
+
+        File tempFile = new File(tempFileName);
+        tempFile.renameTo(previousFile);
+
+        System.out.println("TBRBook.csv atualizado.");
+
+    } catch (IOException e) {
+        System.err.println("Erro atualizando TBRBook.csv: " + e.getMessage());
     }
+}
 
-    public static void updateAuthorsCSV(ArrayList<author> authorList) {
-        String fileName = changeAuthorsPathBasedOnOS();
+public static void updateAuthorsCSV(ArrayList<author> authorList) {
+    String fileName = changeAuthorsPathBasedOnOS();
 
-        try {
-            FileWriter writer = new FileWriter(fileName);
+    try {
 
-            for (author author : authorList) {
-                writer.write(author.getId() + "," + author.getName() + "," + author.getCountry() + "," + author.getBirthYear() + "," + author.getIsAlive() + "\n");
-            }
+        String tempFileName = fileName + ".temp";
+        FileWriter writer = new FileWriter(tempFileName);
 
-            writer.close();
 
-            File previousFile = new File(fileName);
-            if (previousFile.exists()) {
-                previousFile.delete();
-            }
+        writer.close();
 
-            System.out.println("Authors.csv atualizado.");
-
-        } catch (IOException e) {
-            System.err.println("Erro atualizando Authors.csv: " + e.getMessage());
+        File previousFile = new File(fileName);
+        if (previousFile.exists()) {
+            previousFile.delete();
         }
+
+        File tempFile = new File(tempFileName);
+        tempFile.renameTo(previousFile);
+
+        System.out.println("Authors.csv atualizado.");
+
+    } catch (IOException e) {
+        System.err.println("Erro atualizando Authors.csv: " + e.getMessage());
     }
+}
 
-    public static void updateAuthorshipCSV(ArrayList<authorship> authorshipList) {
-        String fileName = changeAuthorshipPathBasedOnOS();
+public static void updateAuthorshipCSV(ArrayList<authorship> authorshipList) {
+    String fileName = changeAuthorshipPathBasedOnOS();
 
-        try {
-            FileWriter writer = new FileWriter(fileName);
+    try {
+        String tempFileName = fileName + ".temp";
+        FileWriter writer = new FileWriter(tempFileName);
 
-            for (authorship authorship : authorshipList) {
-                writer.write(authorship.getBookId() + "," + authorship.getAuthorId() + "\n");
-            }
 
-            writer.close();
+        writer.close();
 
-            File previousFile = new File(fileName);
-            if (previousFile.exists()) {
-                previousFile.delete();
-            }
-
-            System.out.println("Authorship.csv atualizado.");
-
-        } catch (IOException e) {
-            System.err.println("Erro atualizando Authorship.csv: " + e.getMessage());
+        File previousFile = new File(fileName);
+        if (previousFile.exists()) {
+            previousFile.delete();
         }
+
+        File tempFile = new File(tempFileName);
+        tempFile.renameTo(previousFile);
+
+        System.out.println("Authorship.csv atualizado.");
+
+    } catch (IOException e) {
+        System.err.println("Erro atualizando Authorship.csv: " + e.getMessage());
     }
+}
 
     public static void Exiting(ArrayList<author> authorList, ArrayList<readBook> readBookList, ArrayList<tBRBook> tBRBookList, ArrayList<authorship> authorshipList) {
         updateAuthorsCSV(authorList);
