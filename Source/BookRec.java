@@ -303,8 +303,95 @@ public static void printBookTitlesAndId(ArrayList<tBRBook> tBRBookList){
     
             System.out.println(foundBook.getTitle() + " agora está na lista de livros lidos.");
         } else {
-            System.out.println("Livro com a ID " + bookId + " não foi achado na lita de livros a serem lidos.");
+            System.out.println("Livro com a ID " + bookId + " não foi achado na lista de livros a serem lidos.");
         }
+    }
+
+    public static void updateBook(ArrayList<readBook> readBookList, ArrayList<tBRBook> tBRBookList) {
+        Scanner scanner = new Scanner(System.in);
+        String bookId;
+    
+        System.out.println("1. Atualizar um livro lido.");
+        System.out.println("2. Atualizar um livro na lista de livros a serem lidos.");
+        System.out.println("0. Cancel.");
+    
+        System.out.print("Digite o número da sua escolha: ");
+        int choice = scanner.nextInt();
+    
+        scanner.nextLine();
+
+
+        System.out.println("ID - Título");
+
+        switch (choice) {
+            case 1:
+                printBookTitlesAndIdRead(readBookList);
+                System.out.print("Digite o ID do livro que você quer atualizar: ");
+                bookId = scanner.nextLine();
+                for (readBook book : readBookList) {
+                    if (book.getId().equals(bookId)) {
+                        System.out.print("Insira o novo título (Aperte Enter para pular): ");
+                        String newTitle = scanner.nextLine();
+                        if (!newTitle.isEmpty()) {
+                            book.setTitle(newTitle); 
+                        }
+                        System.out.print("Insira o novo ano de publicação (Aperte Enter para pular): ");
+                        String newPublicationYear = scanner.nextLine();
+                        if (!newPublicationYear.isEmpty()) {
+                            book.setPublicationYear(newPublicationYear);
+                        }
+                        System.out.print("Insira a nova nota, entre 0.0 e 5.0 (Aperte Enter para pular): ");
+                        float newRating = (float)(-99.0);
+                        newRating = scanner.nextFloat();
+                        if (newRating >= 0.0 && newRating <= 5.0) {
+                            book.setRating(newRating);
+                        }
+                        System.out.println("Informação atualizada com sucesso.");
+                        scanner.close();
+                        return;
+                    }
+                }
+                System.out.println("Livro com a ID " + bookId + " não foi achado na lista de livros lidos.");
+                break;
+            case 2:
+                printBookTitlesAndId(tBRBookList);
+                System.out.print("Digite o ID do livro que você quer atualizar: ");
+                bookId = scanner.nextLine();
+                for (tBRBook book : tBRBookList) {
+                    if (book.getId().equals(bookId)) {
+                        System.out.print("Insira o novo título (Aperte Enter para pular): ");
+                        String newTitle = scanner.nextLine();
+                        if (!newTitle.isEmpty()) {
+                            book.setTitle(newTitle);
+                        }
+                        System.out.print("Insira o novo ano de publicação (Aperte Enter para pular): ");
+                        String newPublicationYear = scanner.nextLine();
+                        if (!newPublicationYear.isEmpty()) {
+                            book.setPublicationYear(newPublicationYear);
+                        }
+                        System.out.print("Digite S ou Y se o seu livro é uma prioridade entre suas próximas leituras (Aperte Enter para pular):");
+                        char aux = scanner.next().charAt(0);
+                        if ('Y' == aux || 'S' == aux || 'y' == aux || 's' == aux) {
+                            book.setPriority(true);
+                        }
+                        else{
+                            book.setPriority(false);
+                        }
+                        System.out.println("Informação atualizada com sucesso.");
+                        scanner.close();
+                        return;
+                    }
+                }
+                System.out.println("Livro com a ID " + bookId + " não foi achado na lista de livros a serem lidos.");
+                break;
+            case 0:
+                break;
+            default:
+                System.out.println("Invalid choice.");
+                break;
+        }
+    
+        scanner.close();
     }
     
 
