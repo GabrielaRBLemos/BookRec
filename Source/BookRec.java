@@ -1,5 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Random;
@@ -410,6 +412,8 @@ public static void printBookTitlesAndId(ArrayList<tBRBook> tBRBookList){
         float newBookRating;
         Boolean newBookPriority;
 
+        //TODO: Inserir novos autores e autorias, descritores e descritores de livros juntos com livros
+
         Scanner scanner = new Scanner(System.in);
         do {
             printMenuNewBook();
@@ -466,6 +470,110 @@ public static void printBookTitlesAndId(ArrayList<tBRBook> tBRBookList){
         scanner.close();
     }
 
+    public static void updateReadBookCSV(ArrayList<readBook> readBookList) {
+        String fileName = changeReadPathBasedOnOS();
+
+        try {
+            FileWriter writer = new FileWriter(fileName);
+
+            for (readBook book : readBookList) {
+                writer.write(book.getId() + "," + book.getTitle() + "," + book.getPublicationYear() + "," + book.getRating() + "\n");
+            }
+
+            writer.close();
+
+            File previousFile = new File(fileName);
+            if (previousFile.exists()) {
+                previousFile.delete();
+            }
+
+            System.out.println("ReadBook.csv atualizado.");
+
+        } catch (IOException e) {
+            System.err.println("Erro atualizando ReadBook.csv: " + e.getMessage());
+        }
+    }
+
+    public static void updateTBRBookCSV(ArrayList<tBRBook> tBRBookList) {
+        String fileName = changeTBRPathBasedOnOS();
+
+        try {
+            FileWriter writer = new FileWriter(fileName);
+
+            for (tBRBook book : tBRBookList) {
+                writer.write(book.getId() + "," + book.getTitle() + "," + book.getPublicationYear() + "," + book.isPriority() + "\n");
+            }
+
+            writer.close();
+
+            File previousFile = new File(fileName);
+            if (previousFile.exists()) {
+                previousFile.delete();
+            }
+
+            System.out.println("TBRBook.csv atualizado.");
+
+        } catch (IOException e) {
+            System.err.println("Erro atualizando TBRBook.csv: " + e.getMessage());
+        }
+    }
+
+    public static void updateAuthorsCSV(ArrayList<author> authorList) {
+        String fileName = changeAuthorsPathBasedOnOS();
+
+        try {
+            FileWriter writer = new FileWriter(fileName);
+
+            for (author author : authorList) {
+                writer.write(author.getId() + "," + author.getName() + "," + author.getCountry() + "," + author.getBirthYear() + "," + author.getIsAlive() + "\n");
+            }
+
+            writer.close();
+
+            File previousFile = new File(fileName);
+            if (previousFile.exists()) {
+                previousFile.delete();
+            }
+
+            System.out.println("Authors.csv atualizado.");
+
+        } catch (IOException e) {
+            System.err.println("Erro atualizando Authors.csv: " + e.getMessage());
+        }
+    }
+
+    public static void updateAuthorshipCSV(ArrayList<authorship> authorshipList) {
+        String fileName = changeAuthorshipPathBasedOnOS();
+
+        try {
+            FileWriter writer = new FileWriter(fileName);
+
+            for (authorship authorship : authorshipList) {
+                writer.write(authorship.getBookId() + "," + authorship.getAuthorId() + "\n");
+            }
+
+            writer.close();
+
+            File previousFile = new File(fileName);
+            if (previousFile.exists()) {
+                previousFile.delete();
+            }
+
+            System.out.println("Authorship.csv atualizado.");
+
+        } catch (IOException e) {
+            System.err.println("Erro atualizando Authorship.csv: " + e.getMessage());
+        }
+    }
+
+    public static void Exiting(ArrayList<author> authorList, ArrayList<readBook> readBookList, ArrayList<tBRBook> tBRBookList, ArrayList<authorship> authorshipList) {
+        updateAuthorsCSV(authorList);
+        updateAuthorshipCSV(authorshipList);
+        updateReadBookCSV(readBookList);
+        updateTBRBookCSV(tBRBookList);
+        System.out.println("Encerrando o programa.\n Tchau!");
+    }
+
     public static void printMenu () {
         System.out.println("Menu:");
         System.out.println("1. Exibir todos os dados registrados.");
@@ -500,14 +608,14 @@ public static void printBookTitlesAndId(ArrayList<tBRBook> tBRBookList){
                 deleteBook(tBRBookList,readBookList);
                     break;
                 case 4:
-                    
+                    updateBook(readBookList, tBRBookList);
                     break;
                 case 5:
                     moveFromTBRToRead(tBRBookList,readBookList);
                     break;
                 case 0:
-                        
-                    break;
+                    Exiting(authorList, readBookList, tBRBookList, authorshipList);
+                    return;
             
                 default:
                     break;
