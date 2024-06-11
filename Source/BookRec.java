@@ -173,6 +173,31 @@ public class BookRec {
         return ids;
     }
 
+    public static ArrayList<String> getTBRBookListTitles(ArrayList<tBRBook> tBRBookList) {
+        ArrayList<String> titles = new ArrayList<>();
+        for (tBRBook book : tBRBookList) {
+            titles.add(book.getTitle());
+        }
+        return titles;
+    }
+
+public static void printBookTitlesAndId(ArrayList<tBRBook> tBRBookList){
+        ArrayList<String> ids = getTBRBookListIDs(tBRBookList), titles = getTBRBookListTitles(tBRBookList);
+        System.out.println("Ids - Títulos");
+ 
+        for (int i = 0; i < ids.size(); i++) {
+            System.out.println(ids.get(i) + " - " + titles.get(i));
+        }
+    }
+    
+    public static void printBookTitlesAndIdRead(ArrayList<readBook> readBookList){
+        System.out.println("Ids - Títulos");
+    
+        for (readBook book : readBookList) {
+            System.out.println(book.getId() + " - " + book.getTitle());
+        }
+    }
+
     public static ArrayList<String> getReadBookListIDs(ArrayList<readBook> readBookList) {
         ArrayList<String> ids = new ArrayList<>();
         for (readBook book : readBookList) {
@@ -219,6 +244,69 @@ public class BookRec {
             System.out.println();
         }
     }
+
+    public static void deleteBook(ArrayList<tBRBook> tBRBookList, ArrayList<readBook> readBookList) {
+
+        printBookTitlesAndId(tBRBookList);
+        printBookTitlesAndIdRead(readBookList);
+        System.out.print("Digite a ID do livro que você deseja marcar como lido: ");
+
+        Scanner scanner = new Scanner(System.in);
+
+        String bookId = scanner.nextLine();
+
+        scanner.close();
+
+        for (int i = 0; i < tBRBookList.size(); i++) {
+            if (tBRBookList.get(i).getId().equals(bookId)) {
+                tBRBookList.remove(i);
+                System.out.println("Book with ID " + bookId + " removed from 'to be read' list.");
+                return;
+            }
+        }
+
+        for (int i = 0; i < readBookList.size(); i++) {
+            if (readBookList.get(i).getId().equals(bookId)) {
+                readBookList.remove(i);
+                System.out.println("Book with ID " + bookId + " removed from 'read' list.");
+                return;
+            }
+        }
+    
+
+        System.out.println("Book with ID " + bookId + " not found in any list.");
+    }
+    
+
+    public static void moveFromTBRToRead(ArrayList<tBRBook> tBRBookList, ArrayList<readBook> readBookList) {
+
+        printBookTitlesAndId(tBRBookList);
+        System.out.print("Digite a ID do livro que você deseja marcar como lido: ");
+
+        Scanner scanner = new Scanner(System.in);
+
+        String bookId = scanner.nextLine();
+
+        scanner.close();
+
+        tBRBook foundBook = null;
+        for (tBRBook book : tBRBookList) {
+            if (book.getId().equals(bookId)) {
+                foundBook = book;
+                break;
+            }
+        }
+        if (foundBook != null) {
+            tBRBookList.remove(foundBook);
+            readBook readBook = new readBook(foundBook.getId(), foundBook.getTitle(), foundBook.getPublicationYear(), 0.0f); // You can set the initial rating as desired
+            readBookList.add(readBook);
+    
+            System.out.println(foundBook.getTitle() + " agora está na lista de livros lidos.");
+        } else {
+            System.out.println("Livro com a ID " + bookId + " não foi achado na lita de livros a serem lidos.");
+        }
+    }
+    
 
     public static void printMenuNewBook() {
         System.out.println("Menu:");
@@ -322,10 +410,13 @@ public class BookRec {
                     insertNewBook(readBookList,tBRBookList);
                     break;
                 case 3:
-                    
+                deleteBook(tBRBookList,readBookList);
                     break;
                 case 4:
                     
+                    break;
+                case 5:
+                    moveFromTBRToRead(tBRBookList,readBookList);
                     break;
                 case 0:
                         
