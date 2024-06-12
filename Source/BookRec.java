@@ -672,7 +672,9 @@ public static void printBookTitlesAndId(ArrayList<tBRBook> tBRBookList){
         }
     }
 
-    public static void Exiting(ArrayList<author> authorList, ArrayList<readBook> readBookList, ArrayList<tBRBook> tBRBookList, ArrayList<authorship> authorshipList) {
+    public static void Exiting(ArrayList<descriptor> descriptorList, ArrayList<bookDescriptor> bookDescriptorList, ArrayList<author> authorList, ArrayList<readBook> readBookList, ArrayList<tBRBook> tBRBookList, ArrayList<authorship> authorshipList) {
+        updateDescriptorsCSV(descriptorList);
+        updateBookDescriptorsCSV(bookDescriptorList);
         updateAuthorsCSV(authorList);
         updateAuthorshipCSV(authorshipList);
         updateReadBookCSV(readBookList);
@@ -722,7 +724,7 @@ public static void printBookTitlesAndId(ArrayList<tBRBook> tBRBookList){
                     moveFromTBRToRead(tBRBookList,readBookList);
                     break;
                 case 0:
-                    Exiting(authorList, readBookList, tBRBookList, authorshipList);
+                    Exiting(descriptorList, bookDescriptorList, authorList, readBookList, tBRBookList, authorshipList);
                     return;
             
                 default:
