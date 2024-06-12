@@ -16,6 +16,19 @@ public class BookRec {
         }
         return generalPath;
     }
+
+    public static String changeDescriptorsPathBasedOnOS() {
+        String windowsPath = "Data\\Descriptor.csv";
+        String generalPath = "Data/Descriptor.csv";
+        return changePathBasedOnOS(windowsPath, generalPath);
+    }
+
+    public static String changeBookDescriptorsPathBasedOnOS() {
+        String windowsPath = "Data\\BookDescriptor.csv";
+        String generalPath = "Data/BookDescriptor.csv";
+        return changePathBasedOnOS(windowsPath, generalPath);
+    }
+
     public static String changeAuthorsPathBasedOnOS(){ 
         String windowsPath = "Data\\Authors.csv";
         String generalPath = "Data/Authors.csv";
@@ -38,6 +51,50 @@ public class BookRec {
         String windowsPath = "Data\\TBRBook.csv";
         String generalPath = "Data/TBRBook.csv";
         return changePathBasedOnOS(windowsPath,generalPath);
+    }
+
+    public static ArrayList<descriptor> readDescriptors() {
+        String descriptorsFile = changeDescriptorsPathBasedOnOS();
+        ArrayList<descriptor> descriptorList = new ArrayList<>();
+
+        try (Scanner scanner = new Scanner(new File(descriptorsFile))) {
+            scanner.useDelimiter(",|\\n");
+
+            while (scanner.hasNext()) {
+                String id = scanner.next();
+                String name = scanner.next();
+
+                descriptor newDescriptor = new descriptor(id, name);
+                descriptorList.add(newDescriptor);
+            }
+        } catch (FileNotFoundException e) {
+            System.err.println("File not found: " + descriptorsFile);
+            e.printStackTrace();
+        }
+
+        return descriptorList;
+    }
+
+    public static ArrayList<bookDescriptor> readBookDescriptors() {
+        String bookDescriptorsFile = changeBookDescriptorsPathBasedOnOS();
+        ArrayList<bookDescriptor> bookDescriptorList = new ArrayList<>();
+
+        try (Scanner scanner = new Scanner(new File(bookDescriptorsFile))) {
+            scanner.useDelimiter(",|\\n");
+
+            while (scanner.hasNext()) {
+                String bookId = scanner.next();
+                String descriptorId = scanner.next();
+
+                bookDescriptor newBookDescriptor = new bookDescriptor(bookId, descriptorId);
+                bookDescriptorList.add(newBookDescriptor);
+            }
+        } catch (FileNotFoundException e) {
+            System.err.println("File not found: " + bookDescriptorsFile);
+            e.printStackTrace();
+        }
+
+        return bookDescriptorList;
     }
 
     public static ArrayList<author> readAuthors(){
@@ -183,6 +240,30 @@ public class BookRec {
         return titles;
     }
 
+    public static ArrayList<String> getDescriptorsForBook(String bookId, ArrayList<bookDescriptor> bookDescriptorList, ArrayList<descriptor> descriptorList) {
+        ArrayList<String> bookDescriptors = new ArrayList<>();
+    
+        for (bookDescriptor bookDescriptor : bookDescriptorList) {
+            if (bookDescriptor.getBookId().equals(bookId)) {
+
+                String descriptorName = getDescriptorNameById(bookDescriptor.getDescriptorId(), descriptorList);
+                if (descriptorName != null) {
+                    bookDescriptors.add(descriptorName);
+                }
+            }
+        }
+    
+        return bookDescriptors;
+    }
+    
+    public static String getDescriptorNameById(String descriptorId, ArrayList<descriptor> descriptorList) {
+        for (descriptor descriptor : descriptorList) {
+            if (descriptor.getId().equals(descriptorId)) {
+                return descriptor.getName();
+            }
+        }
+        return null;
+    }
 public static void printBookTitlesAndId(ArrayList<tBRBook> tBRBookList){
         ArrayList<String> ids = getTBRBookListIDs(tBRBookList), titles = getTBRBookListTitles(tBRBookList);
         System.out.println("Ids - Títulos");
@@ -208,41 +289,47 @@ public static void printBookTitlesAndId(ArrayList<tBRBook> tBRBookList){
         return ids;
     }
 
-    public static void printAll( ArrayList<author> authorList, ArrayList<readBook> readBookList, ArrayList<tBRBook> tBRBookList, ArrayList<authorship> authorshipList) {
+    public static void printAll(ArrayList<author> authorList, ArrayList<readBook> readBookList, ArrayList<tBRBook> tBRBookList, ArrayList<authorship> authorshipList, ArrayList<descriptor> descriptorList, ArrayList<bookDescriptor> bookDescriptorList) {
         ArrayList<String> bookAuthorship;
-
+        ArrayList<String> bookDescriptors;
+    
         System.out.println("Dados Registrados:");
-
+    
+        System.out.println("Autores:");
         for (author a : authorList) {
-
             System.out.println("    ID: " + a.getId());
-            System.out.println("    Name: " + a.getName());
-            System.out.println("    Country: " + a.getCountry());
-            System.out.println("    Birth Year: " + a.getBirthYear());
-            System.out.println("    Is Alive: " + a.getIsAlive());
+            System.out.println("    Nome: " + a.getName());
+            System.out.println("    País: " + a.getCountry());
+            System.out.println("    Nascimento: " + a.getBirthYear());
+            System.out.println("    Está vivo?: " + a.getIsAlive());
             System.out.println();
         }
+
+        System.out.println("Livros Lidos:");
         for (readBook rb : readBookList) {
-
             bookAuthorship = getAuthorsForBook(rb.getId(), authorshipList, authorList);
-
+            bookDescriptors = getDescriptorsForBook(rb.getId(), bookDescriptorList, descriptorList);
+    
             System.out.println("    ID: " + rb.getId());
-            System.out.println("    Title: " + rb.getTitle());
-            System.out.println("    Publication: " + rb.getPublicationYear());
-            System.out.println("    Rating: " + rb.getRating());
-            System.out.println("    Authors:" + bookAuthorship);
+            System.out.println("    Título: " + rb.getTitle());
+            System.out.println("    Publicação: " + rb.getPublicationYear());
+            System.out.println("    Nota: " + rb.getRating());
+            System.out.println("    Autores: " + bookAuthorship);
+            System.out.println("    Descritores: " + bookDescriptors);
             System.out.println();
         }
 
+        System.out.println("Livros a serem Lidos:");
         for (tBRBook tbrb : tBRBookList) {
-
             bookAuthorship = getAuthorsForBook(tbrb.getId(), authorshipList, authorList);
-
+            bookDescriptors = getDescriptorsForBook(tbrb.getId(), bookDescriptorList, descriptorList);
+    
             System.out.println("    ID: " + tbrb.getId());
-            System.out.println("    Title: " + tbrb.getTitle());
-            System.out.println("    Publication: " + tbrb.getPublicationYear());
-            System.out.println("    Priority: " + tbrb.isPriority());
-            System.out.println("    Authors:" + bookAuthorship);
+            System.out.println("    Título: " + tbrb.getTitle());
+            System.out.println("    Publicação: " + tbrb.getPublicationYear());
+            System.out.println("    Prioridade: " + tbrb.isPriority());
+            System.out.println("    Autores: " + bookAuthorship);
+            System.out.println("    Descritores: " + bookDescriptors);
             System.out.println();
         }
     }
@@ -470,107 +557,120 @@ public static void printBookTitlesAndId(ArrayList<tBRBook> tBRBookList){
         scanner.close();
     }
 
+    public static void updateDescriptorsCSV(ArrayList<descriptor> descriptorList) {
+        String fileName = changeDescriptorsPathBasedOnOS();
+    
+        try {
+            FileWriter writer = new FileWriter(fileName);
+    
+            for (descriptor descriptor : descriptorList) {
+                writer.write(descriptor.getId() + "," + descriptor.getName() + "\n");
+            }
+    
+            writer.close();
+    
+            System.out.println("Descriptors.csv atualizado.");
+    
+        } catch (IOException e) {
+            System.err.println("Erro atualizando Descriptors.csv: " + e.getMessage());
+        }
+    }
+    
+    public static void updateBookDescriptorsCSV(ArrayList<bookDescriptor> bookDescriptorList) {
+        String fileName = changeBookDescriptorsPathBasedOnOS();
+    
+        try {
+            FileWriter writer = new FileWriter(fileName);
+    
+            for (bookDescriptor bookDescriptor : bookDescriptorList) {
+                writer.write(bookDescriptor.getBookId() + "," + bookDescriptor.getDescriptorId() + "\n");
+            }
+    
+            writer.close();
+    
+            System.out.println("BookDescriptors.csv atualizado.");
+    
+        } catch (IOException e) {
+            System.err.println("Erro atualizando BookDescriptors.csv: " + e.getMessage());
+        }
+    }
+    
+
     public static void updateReadBookCSV(ArrayList<readBook> readBookList) {
         String fileName = changeReadPathBasedOnOS();
-
+    
         try {
-
-            String tempFileName = fileName + ".temp";
-            FileWriter writer = new FileWriter(tempFileName);
-
-
-            writer.close();
-
-            File previousFile = new File(fileName);
-            if (previousFile.exists()) {
-                previousFile.delete();
+            FileWriter writer = new FileWriter(fileName);
+    
+            for (readBook book : readBookList) {
+                writer.write(book.getId() + "," + book.getTitle() + "," + book.getPublicationYear() + "," + book.getRating() + "\n");
             }
-
-            File tempFile = new File(tempFileName);
-            tempFile.renameTo(previousFile);
-
+    
+            writer.close();
+    
             System.out.println("ReadBook.csv atualizado.");
-
+    
         } catch (IOException e) {
             System.err.println("Erro atualizando ReadBook.csv: " + e.getMessage());
         }
-}
-
-public static void updateTBRBookCSV(ArrayList<tBRBook> tBRBookList) {
-    String fileName = changeTBRPathBasedOnOS();
-
-    try {
-
-        String tempFileName = fileName + ".temp";
-        FileWriter writer = new FileWriter(tempFileName);
-
-        writer.close();
-
-        File previousFile = new File(fileName);
-        if (previousFile.exists()) {
-            previousFile.delete();
-        }
-
-        File tempFile = new File(tempFileName);
-        tempFile.renameTo(previousFile);
-
-        System.out.println("TBRBook.csv atualizado.");
-
-    } catch (IOException e) {
-        System.err.println("Erro atualizando TBRBook.csv: " + e.getMessage());
     }
-}
-
-public static void updateAuthorsCSV(ArrayList<author> authorList) {
-    String fileName = changeAuthorsPathBasedOnOS();
-
-    try {
-
-        String tempFileName = fileName + ".temp";
-        FileWriter writer = new FileWriter(tempFileName);
-
-
-        writer.close();
-
-        File previousFile = new File(fileName);
-        if (previousFile.exists()) {
-            previousFile.delete();
+    
+    public static void updateTBRBookCSV(ArrayList<tBRBook> tBRBookList) {
+        String fileName = changeTBRPathBasedOnOS();
+    
+        try {
+            FileWriter writer = new FileWriter(fileName);
+    
+            for (tBRBook book : tBRBookList) {
+                writer.write(book.getId() + "," + book.getTitle() + "," + book.getPublicationYear() + "," + book.isPriority() + "\n");
+            }
+    
+            writer.close();
+    
+            System.out.println("TBRBook.csv atualizado.");
+    
+        } catch (IOException e) {
+            System.err.println("Erro atualizando TBRBook.csv: " + e.getMessage());
         }
-
-        File tempFile = new File(tempFileName);
-        tempFile.renameTo(previousFile);
-
-        System.out.println("Authors.csv atualizado.");
-
-    } catch (IOException e) {
-        System.err.println("Erro atualizando Authors.csv: " + e.getMessage());
     }
-}
 
-public static void updateAuthorshipCSV(ArrayList<authorship> authorshipList) {
-    String fileName = changeAuthorshipPathBasedOnOS();
-
-    try {
-        String tempFileName = fileName + ".temp";
-        FileWriter writer = new FileWriter(tempFileName);
-
-
-        writer.close();
-
-        File previousFile = new File(fileName);
-        if (previousFile.exists()) {
-            previousFile.delete();
+    public static void updateAuthorsCSV(ArrayList<author> authorList) {
+        String fileName = changeAuthorsPathBasedOnOS();
+    
+        try {
+            FileWriter writer = new FileWriter(fileName);
+    
+            for (author author : authorList) {
+                writer.write(author.getId() + "," + author.getName() + "," + author.getCountry() + "," + author.getBirthYear() + "," + author.getIsAlive() + "\n");
+            }
+    
+            writer.close();
+    
+            System.out.println("Authors.csv atualizado.");
+    
+        } catch (IOException e) {
+            System.err.println("Erro atualizando Authors.csv: " + e.getMessage());
         }
-
-        File tempFile = new File(tempFileName);
-        tempFile.renameTo(previousFile);
-
-        System.out.println("Authorship.csv atualizado.");
-
-    } catch (IOException e) {
-        System.err.println("Erro atualizando Authorship.csv: " + e.getMessage());
     }
-}
+    
+    public static void updateAuthorshipCSV(ArrayList<authorship> authorshipList) {
+        String fileName = changeAuthorshipPathBasedOnOS();
+    
+        try {
+            FileWriter writer = new FileWriter(fileName);
+    
+            for (authorship authorship : authorshipList) {
+                writer.write(authorship.getBookId() + "," + authorship.getAuthorId() + "\n");
+            }
+    
+            writer.close();
+    
+            System.out.println("Authorship.csv atualizado.");
+    
+        } catch (IOException e) {
+            System.err.println("Erro atualizando Authorship.csv: " + e.getMessage());
+        }
+    }
 
     public static void Exiting(ArrayList<author> authorList, ArrayList<readBook> readBookList, ArrayList<tBRBook> tBRBookList, ArrayList<authorship> authorshipList) {
         updateAuthorsCSV(authorList);
@@ -591,6 +691,8 @@ public static void updateAuthorshipCSV(ArrayList<authorship> authorshipList) {
     }
     
     public static void main(String[] args) {
+        ArrayList<descriptor> descriptorList = readDescriptors();
+        ArrayList<bookDescriptor> bookDescriptorList = readBookDescriptors();        
         ArrayList<author> authorList = readAuthors();
         ArrayList<readBook> readBookList = readReadBooks();
         ArrayList<tBRBook> tBRBookList = readTBRBooks();
@@ -605,7 +707,7 @@ public static void updateAuthorshipCSV(ArrayList<authorship> authorshipList) {
 
             switch (choice) {
                 case 1:
-                    printAll(authorList, readBookList, tBRBookList, authorshipList);
+                    printAll(authorList, readBookList, tBRBookList, authorshipList, descriptorList, bookDescriptorList);
                     break;
                 case 2:
                     insertNewBook(readBookList,tBRBookList);
