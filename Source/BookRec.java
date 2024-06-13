@@ -68,7 +68,7 @@ public class BookRec {
                 descriptorList.add(newDescriptor);
             }
         } catch (FileNotFoundException e) {
-            System.err.println("File not found: " + descriptorsFile);
+            System.err.println("Arquivo não foi achado: " + descriptorsFile);
             e.printStackTrace();
         }
 
@@ -90,7 +90,7 @@ public class BookRec {
                 bookDescriptorList.add(newBookDescriptor);
             }
         } catch (FileNotFoundException e) {
-            System.err.println("File not found: " + bookDescriptorsFile);
+            System.err.println("Arquivo não foi achado: " + bookDescriptorsFile);
             e.printStackTrace();
         }
 
@@ -118,7 +118,7 @@ public class BookRec {
                 authorList.add(newAuthor);
             }
         } catch (FileNotFoundException e) {
-            System.err.println("File not found: " + authorsFile);
+            System.err.println("Arquivo não foi achado: " + authorsFile);
             e.printStackTrace();
         }
         return authorList;
@@ -141,7 +141,7 @@ public class BookRec {
                 readBookList.add(readBook);
             }
         } catch (FileNotFoundException e) {
-            System.err.println("File not found: " + readBooksFile);
+            System.err.println("Arquivo não foi achado: " + readBooksFile);
             e.printStackTrace();
         }
 
@@ -165,7 +165,7 @@ public class BookRec {
                 tBRBookList.add(tBRBook);
             }
         } catch (FileNotFoundException e) {
-            System.err.println("File not found: " + tBRBooksFile);
+            System.err.println("Arquivo não foi achado: " + tBRBooksFile);
             e.printStackTrace();
         }
 
@@ -187,7 +187,7 @@ public class BookRec {
                 authorshipList.add(authorship);
             }
         } catch (FileNotFoundException e) {
-            System.err.println("File not found: " + authorshipFile);
+            System.err.println("Arquivo não foi achado: " + authorshipFile);
             e.printStackTrace();
         }
 
@@ -387,7 +387,7 @@ public static void printBookTitlesAndId(ArrayList<tBRBook> tBRBookList){
         }
         if (foundBook != null) {
             tBRBookList.remove(foundBook);
-            readBook readBook = new readBook(foundBook.getId(), foundBook.getTitle(), foundBook.getPublicationYear(), 0.0f); // You can set the initial rating as desired
+            readBook readBook = new readBook(foundBook.getId(), foundBook.getTitle(), foundBook.getPublicationYear(), 0.0f);
             readBookList.add(readBook);
     
             System.out.println(foundBook.getTitle() + " agora está na lista de livros lidos.");
@@ -476,7 +476,7 @@ public static void printBookTitlesAndId(ArrayList<tBRBook> tBRBookList){
             case 0:
                 break;
             default:
-                System.out.println("Invalid choice.");
+                System.out.println("Escolha inválida.");
                 break;
         }
     
